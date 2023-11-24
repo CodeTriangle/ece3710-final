@@ -1,16 +1,5 @@
 #include "LED.h"
 
-#define SEND_BIT(bit, offset) { \
-	volatile int x; \
-	if (bit) { \
-		for (x = 0; x < 32 - offset; x++); \
-		for (x = 0; x < 15 - offset; x++); \
-	} else { \
-		for (x = 0; x < 12 - offset; x++); \
-		for (x = 0; x < 33 - offset; x++); \
-	} \
-}
-
 void make_bitmap(const uint8_t *image, uint8_t *bitmap, size_t length) {
 	size_t offset;
 	uint8_t *color, *dst;

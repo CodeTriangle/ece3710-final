@@ -16,9 +16,6 @@
 #define ORANGE 7
 
 static uint8_t bitmap[BMP_SIZE * 3] = {0};
-static uint8_t bitmap_swap[BMP_SIZE * 3] = {0};
-
-static uint8_t *bitmap_drawn = bitmap_swap;
 
 static uint8_t colors[8][3] = {
 	//            GRN   RED   BLU
@@ -31,6 +28,8 @@ static uint8_t colors[8][3] = {
 	[PURPLE] = { 0x00, 0xFF, 0x7F },
 	[ORANGE] = { 0x7F, 0xFF, 0x00 },
 };
+
+void make_bitmap(const uint8_t *image, uint8_t *bitmap, size_t length);
 
 extern void flash_image(const uint8_t *bitmap, size_t length);
 
