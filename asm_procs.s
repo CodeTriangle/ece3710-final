@@ -1,7 +1,9 @@
-	.global flash_image
-	.type flash_image, "function"
-	.p2align 4 
-flash_image:
+	INCLUDE core_cm4_constants.s
+	INCLUDE stm32l476xx_constants.s
+	
+	AREA	FLASH_IMAGE, CODE, READONLY
+	EXPORT flash_image
+flash_image
 	; r0 = pointer to bitmap
 	; r1 = length of bitmap
 	PUSH	{r4, r5, r6, r7}
@@ -20,13 +22,13 @@ flash_image:
 
 	; r6 = GPIOB_ODR with logic high
 	LDR	r6, [r5, #GPIO_ODR]
-	ORR	r6, 0x01 ; offset subject to change
+	ORR	r6, #0x01 ; offset subject to change
 
 	; r7 = GPIOB_ODR with logic low
 	LDR	r7, [r5, #GPIO_ODR]
-	BIC	r7, 0x01 ; offset subject to change
+	BIC	r7, #0x01 ; offset subject to change
 
-start_send:
+start_send
 	; start by storing logic high
 	STR	r6, [r5, #GPIO_ODR]
 	;; LOGIC
@@ -48,7 +50,7 @@ start_send:
 
 	; if byte & mask, send one
 	BEQ	send_one
-send_zero:
+send_zero
 	; should reach here 11 clock cycles after setting logic high
 	STR	r7, [r5, #GPIO_ODR]
 
@@ -69,7 +71,7 @@ send_zero:
 
 	B	finish_send
 
-send_one:
+send_one
 	NOP
 	NOP
 	NOP
@@ -88,7 +90,7 @@ send_one:
 	; should reach here 24 clock cycles after setting logic high
 	STR	r7, [r5, #GPIO_ODR]
 
-finish_send:
+finish_send
 	; iterating and getting the next byte take about 10 clock cycles
 	; this adds just a little buffer so we don't miss a timing window
 	; for the .45us window, we'll have 12cc
@@ -96,7 +98,7 @@ finish_send:
 	NOP
 	NOP
 
-iterate:
+iterate
 	;; LOOPING
 	
 	; check if we're at the end of the byte
@@ -105,7 +107,7 @@ iterate:
 	; if so, go to the next byte
 	BNE	next_offset
 
-next_byte:
+next_byte
 	; add one to offset
 	ADD	r2, #1
 	; check if we're done
@@ -120,9 +122,9 @@ next_byte:
 
 	B	start_send
 
-next_offset:
+next_offset
 	; go to next least significant byte
-	RSL	r4, #1
+	LSR	r4, #1
 
 	; pad until other branch is done
 	NOP
@@ -130,7 +132,9 @@ next_offset:
 
 	B	start_send
 
-epilogue:
+epilogue
 	POP	{r4, r5, r6, r7}
+	
+	MOV pc, lr
 
-	RET
+	END

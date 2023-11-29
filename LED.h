@@ -7,13 +7,15 @@
 #define BMP_SIZE 256
 
 #define BLACK  0
-#define WHITE  1
-#define RED    2
-#define GREEN  3
-#define BLUE   4
-#define YELLOW 5
-#define PURPLE 6
-#define ORANGE 7
+#define RED    1
+#define YELLOW 2
+#define BLUE   3
+#define GREEN  4
+#define PURPLE 5
+#define ORANGE 6
+#define WHITE  7
+
+static uint8_t image[BMP_SIZE] = {0};
 
 static uint8_t bitmap[BMP_SIZE * 3] = {0};
 
@@ -29,7 +31,7 @@ static uint8_t colors[8][3] = {
 	[ORANGE] = { 0x7F, 0xFF, 0x00 },
 };
 
-void make_bitmap(const uint8_t *image, uint8_t *bitmap, size_t length);
+void make_bitmap(void);
 
 extern void flash_image(const uint8_t *bitmap, size_t length);
 

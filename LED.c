@@ -1,10 +1,10 @@
 #include "LED.h"
 
-void make_bitmap(const uint8_t *image, uint8_t *bitmap, size_t length) {
+void make_bitmap(void) {
 	size_t offset;
 	uint8_t *color, *dst;
 
-	for (offset = 0; offset < length; offset++) {
+	for (offset = 0; offset < BMP_SIZE; offset++) {
 		color = colors[image[offset]];
 		dst = bitmap + offset * 3;
 		dst[0] = color[0];
