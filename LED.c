@@ -12,3 +12,11 @@ void make_bitmap(void) {
 		dst[2] = color[2];
 	}
 }
+
+void set_pixel(const uint8_t x, const uint8_t y, const uint8_t color) {
+    uint8_t yoffset = x % 16 ? (16 - y) : y;
+    uint8_t xoffset = x * 16;
+    uint8_t idx = xoffset + yoffset;
+
+    image[idx] = color;
+}

@@ -8,7 +8,7 @@ uint8_t get_button_pressed(void) {
 		
 		for (uint8_t i = 1; i <= 6; i++) {
 			if (!(idr & 0x1 << i)) {
-				return 1;
+				return i;
 			}
 		}
 		
