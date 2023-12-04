@@ -49,7 +49,7 @@ start_send
 	NOP
 
 	; if byte & mask, send one
-	BEQ	send_one
+	BNE	send_one
 send_zero
 	; should reach here 11 clock cycles after setting logic high
 	STR	r7, [r5, #GPIO_ODR]
@@ -133,6 +133,8 @@ next_offset
 	B	start_send
 
 epilogue
+	STR	r7, [r5, #GPIO_ODR]
+	
 	POP	{r4, r5, r6, r7}
 	
 	MOV pc, lr
