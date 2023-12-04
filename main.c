@@ -12,12 +12,12 @@ int main(void) {
 	GPIOB->PUPDR = (GPIOB->PUPDR & 0xFFFFC000u) | 0x00001554u;
 
 	for (size_t i = 0; i < BMP_SIZE; i++) {
-		bitmap[3*i] = (uint8_t)0x20;
-		bitmap[3*i+1] = (uint8_t)0x18;
-		bitmap[3*i+2] = (uint8_t)0xFC;
+		bitmap[3*i] = (uint8_t) i;
+		bitmap[3*i+1] = (uint8_t) (255-i);
+		bitmap[3*i+2] = (uint8_t) (127-i);
 	}
 	
-	flash_image(bitmap, BMP_SIZE * 3);
+	flash_image(bitmap, BMP_SIZE*3);
 	
 	while(1) {
 //		uint8_t button = get_button_pressed();
