@@ -1,6 +1,6 @@
 #include "LED.h"
 
-void make_bitmap(void) {
+void make_bitmap(const uint8_t *image, uint8_t *bitmap) {
 	size_t offset;
 	uint8_t *color, *dst;
 
@@ -13,9 +13,9 @@ void make_bitmap(void) {
 	}
 }
 
-void set_pixel(const uint8_t x, const uint8_t y, const uint8_t color) {
-    uint8_t yoffset = x % 16 ? (16 - y) : y;
-    uint8_t xoffset = x * 16;
+void set_pixel(uint8_t *image, const uint8_t x, const uint8_t y, const uint8_t color) {
+	uint8_t yoffset = x % 2 ? (15 - y) : y;
+    uint8_t xoffset = (15 - x) * 16;
     uint8_t idx = xoffset + yoffset;
 
     image[idx] = color;
