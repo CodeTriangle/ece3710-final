@@ -14,23 +14,25 @@ int main(void) {
 	RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN;
 	GPIOB->MODER = (GPIOB->MODER & 0xFFFFC000u) | 0x00000001u;
 	GPIOB->PUPDR = (GPIOB->PUPDR & 0xFFFFC000u) | 0x00001554u;
-
-	for (size_t i = 0; i < 8; i++) {
-		for (size_t j = 0; j < 8; j++) {
-			set_pixel(IMAGE, (uint8_t) i, (uint8_t) j, (i + j) % 8);
-		}
-	}
-	
-	make_bitmap(IMAGE, BITMAP);
 	
 	flash_image(BITMAP, BMP_SIZE*3);
-	
+	uint8_t x = 0, y = 0;
 	while(1) {
-//		uint8_t button = get_button_pressed();
-//		if (button) {
-//			// mastermind stuff
-//			make_bitmap();
-//			flash_image(bitmap, BMP_SIZE);
-//		}
+		uint8_t button = get_button_pressed();
+		
+		if (button) {
+			set_pixel(IMAGE, x, y, button);
+			x++;
+			if (x == 16) {
+				x = 0;
+				y++;
+			}
+			if (y == 16) {
+				y = 0;
+			}
+			// mastermind stuff
+			make_bitmap(IMAGE, BITMAP);
+			flash_image(BITMAP, BMP_SIZE*3);
+		}
 	}
 }
