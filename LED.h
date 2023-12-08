@@ -31,6 +31,8 @@ void make_bitmap(const uint8_t *image, uint8_t *bitmap);
 
 void set_pixel(uint8_t *image, const uint8_t x, const uint8_t y, const uint8_t color);
 
+void clear_screen(uint8_t *image, uint8_t *bitmap);
+
 extern void flash_image(const uint8_t *bitmap, size_t length);
 
 #endif // _LED_H

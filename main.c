@@ -15,15 +15,14 @@ int main(void) {
 	GPIOB->MODER = (GPIOB->MODER & 0xFFFFC000u) | 0x00000001u;
 	GPIOB->PUPDR = (GPIOB->PUPDR & 0xFFFFC000u) | 0x00001554u;
 	
-//	RCC->AHB2ENR |= RCC_AHB2ENR_RNGEN;
-//	RNG->CR |= RNG_CR_RNGEN;
-//	
-//	while (!(RNG->SR & RNG_SR_DRDY));
+	RCC->AHB2ENR |= RCC_AHB2ENR_RNGEN;
+	RNG->CR |= RNG_CR_RNGEN;
 	
-//	srand(time(NULL));
-//	for (int i = 0; i < 4; i++) {
-//		set_pixel(IMAGE, i, 15, rand() % 6 + 1);
-//	}
+	RCC->CCIPR |= RCC_CCIPR_CLK48SEL;
 	
+	while (!(RNG->SR & RNG_SR_DRDY));
+	
+	srand(RNG->DR);
+
 	mastermind();
 }

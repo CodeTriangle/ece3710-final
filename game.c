@@ -44,23 +44,25 @@ static uint8_t IMAGE[BMP_SIZE] = {0};
 static uint8_t BITMAP[BMP_SIZE * 3] = {0};
 
 void mastermind() {
+	while(1) {
+		mastermind_once();
+		while (!get_button_pressed());
+		clear_screen(IMAGE, BITMAP);
+	}
+}
+	
+void mastermind_once() {
 	flash_image(BITMAP, BMP_SIZE * 3);
 	
 	uint8_t secret[4] = {0}, guesses[16][4] = {0}, results[16][4] = {0};
 	//loop 1 from pseudocode
 	for (int i = 0; i < 4; i++) {
-		while (1) {
-			uint8_t button = get_button_pressed();
-			
-			if (button) {
-				secret[i] = button;
-				set_pixel(IMAGE, 0, i, button);
-				make_bitmap(IMAGE, BITMAP);
-				flash_image(BITMAP, BMP_SIZE * 3);
-				break;
-			}
-		}
+		secret[i] = (uint8_t) rand() % 6 + 1;
+//		set_pixel(IMAGE, 0, i, secret[i]);
 	}
+	
+//	make_bitmap(IMAGE, BITMAP);
+//	flash_image(BITMAP, BMP_SIZE * 3);
 
 	//loop 2 from pseudocode
 	for (uint8_t line = 0; line < LINES; line++) {		//line input
@@ -110,6 +112,9 @@ void mastermind() {
 			}
 		}
 		
+		int won = white_amt == 4;
+		int lost = line == 15 && !won;
+		
 		for (uint8_t display = 0; display < 4; display++) {
 			if (white_amt > 0) {
 				results[line][display] = WHITE;			//display white in guesses section if correct number is same position
@@ -124,7 +129,21 @@ void mastermind() {
 			}
 		}
 
+		if (won || lost) {
+			uint8_t color = won ? GREEN : RED;
+			for (uint8_t row = 0; row < 16; row++) {
+				for (uint8_t col = 0; col < 2; col++) {
+					set_pixel(IMAGE, col, row, color);
+					set_pixel(IMAGE, 15 - col, row, color);
+				}
+			}
+		}
+			
 		make_bitmap(IMAGE, BITMAP);
 		flash_image(BITMAP, BMP_SIZE * 3);
+		
+		if (won || lost) {
+			return;
+		}
 	}
 }
